@@ -9,7 +9,7 @@ interface BridgeManager:
     def depositFor(_user: address, _root_token: address, _deposit_data: Bytes[32]): nonpayable
 
 
-CRV20: constant(address) = 0xD533a949740bb3306d119CC777fa900bA034cd52
+INSURE: constant(address) = 0x09f0Ad07E7363557D077CF3e3BbaB9365DA533F6
 POLYGON_BRIDGE_MANAGER: constant(address) = 0xA0c68C638235ee32657e8f720a23ceC1bFc77C77
 POLYGON_BRIDGE_RECEIVER: constant(address) = 0x40ec5B33f54e0E8A33A975908C5BA1c14e5BbbDf
 
@@ -20,8 +20,8 @@ is_approved: public(HashMap[address, bool])
 
 @external
 def __init__():
-    assert ERC20(CRV20).approve(POLYGON_BRIDGE_RECEIVER, MAX_UINT256)
-    self.is_approved[CRV20] = True
+    assert ERC20(INSURE).approve(POLYGON_BRIDGE_RECEIVER, MAX_UINT256)
+    self.is_approved[INSURE] = True
 
 
 @external
@@ -34,7 +34,7 @@ def bridge(_token: address, _to: address, _amount: uint256):
     """
     assert ERC20(_token).transferFrom(msg.sender, self, _amount)
 
-    if _token != CRV20 and not self.is_approved[_token]:
+    if _token != INSURE and not self.is_approved[_token]:
         assert ERC20(_token).approve(POLYGON_BRIDGE_RECEIVER, MAX_UINT256)
         self.is_approved[_token] = True
 
